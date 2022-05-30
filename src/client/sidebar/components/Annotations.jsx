@@ -1,64 +1,79 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import CardMenu from './CardMenu';
-import referenceAnnotations from './referenceAnnotations';
+import { Spinner } from 'react-bootstrap';
+// import referenceAnnotations from './referenceAnnotations';
+import AnnotationCard from './AnnotationCard';
 
-class AnnotationCard extends React.Component {
+import CallServerCorrection from '../../utils/callServerCorrection';
+
+// let props = {
+//   errorCode: 'Z001',
+//   errorSent:
+//     'betra væri að setja stórfelldar afléttingar í kælir fram yfir Páska en búist er við umtalsverðum fólksferðum innanlands yfir helgina.',
+//   annText: 'Orð á að byrja á lágstaf: Páska',
+//   annDetail: null,
+//   suggestion: 'páska',
+//   start_char: 175.0,
+//   end_char: 180.0,
+// };
+
+class Annotations extends React.Component {
+  state = {
+    docAnnotations: null,
+  };
+
+  componentDidMount() {
+    this._asyncRequest = CallServerCorrection().then(docAnnotations => {
+      console.log(docAnnotations);
+      this._asyncRequest = null;
+      this.setState({ docAnnotations });
+    });
+  }
+
+  componentWillUnmount() {
+    if (this._asyncRequest) {
+      this._asyncRequest.cancel();
+    }
+  }
+
   render() {
-    const styling = {
-      opacity: 1,
-      backgroundColor: 'white',
-    };
+    if (this.state.docAnnotations === null) {
+      return (
+        <div id="spinnerContainer">
+          <Spinner
+            animation="border"
+            role="status"
+            style={{
+              width: '6rem',
+              height: '6rem',
+              border: '1rem solid',
+              borderRight: '1em solid transparent',
+              animation: 'spinner-border 1s linear ease-in-out infinite',
+            }}
+          ></Spinner>
+        </div>
+      );
+    }
     return (
-      <div className="annotation block" style={styling}>
-        <div className="ruleArea">
-          <span>Möguleg villa fundin:</span>
-        </div>
-        <div className="errorArea">
-          {/* <span>{this.props.errorSent}</span> */}
-          <span> {this.props.annText} </span>
-        </div>
-        <div className="annCardMenu">
-          <div>
-            <CardMenu></CardMenu>
-          </div>
-        </div>
+      <div id="annotations">
+        {/* <div id="spinnerContainer">
+          <Spinner
+            animation="border"
+            role="status"
+            style={{
+              width: '6rem',
+              height: '6rem',
+              border: '1rem solid',
+              borderRight: '1em solid transparent',
+              animation: 'spinner-border 1s linear ease-in-out infinite',
+            }}
+          ></Spinner>
+        </div> */}
+        {this.state.docAnnotations.map((annotation, index) => (
+          <AnnotationCard key={index} {...annotation}></AnnotationCard>
+        ))}
       </div>
     );
   }
 }
-
-AnnotationCard.propTypes = {
-  end_char: PropTypes.number,
-  end: PropTypes.number,
-  nonce: PropTypes.any,
-  code: PropTypes.string,
-  detail: PropTypes.any,
-  token: PropTypes.string,
-  start_char: PropTypes.number,
-  sent: PropTypes.string,
-  start: PropTypes.number,
-  text: PropTypes.string,
-  suggest: PropTypes.string,
-};
-
-let props = {
-  errorCode: 'Z001',
-  errorSent:
-    'betra væri að setja stórfelldar afléttingar í kælir fram yfir Páska en búist er við umtalsverðum fólksferðum innanlands yfir helgina.',
-  annText: 'Orð á að byrja á lágstaf: Páska',
-  annDetail: null,
-  suggestion: 'páska',
-  start_char: 175.0,
-  end_char: 180.0,
-};
-
-const Annotations = () => (
-  <div id="annotations">
-    {referenceAnnotations.map((annotation, index) => (
-      <AnnotationCard key={index} {...annotation}></AnnotationCard>
-    ))}
-  </div>
-);
 
 export default Annotations;

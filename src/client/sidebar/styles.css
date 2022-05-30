@@ -36,9 +36,24 @@ header {
   display: block;
 }
 
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
   color: #222;
   font: 13px/18px arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+#spinnerContainer {
+    margin: auto;
+    padding-top: 100%;
 }
 
 .sidebar {
@@ -97,7 +112,7 @@ block + .block,
 /* FOOTER */
 
 footer {
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   bottom: 0;
   width: 100%;
@@ -108,7 +123,7 @@ footer {
 
 #mideindFooter {
   display: flex;
-  height: 20px;
+  height: 30px;
   font-size: 10px;
   padding: 7px;
   padding-bottom: 0px;
@@ -132,13 +147,26 @@ footer {
   margin-bottom: 12px;
 }
 
+.annotation.block.animated-background {
+    animation-duration: 0.7s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: clickIndication;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, white 8%, rgba(255, 255, 255, 0.591 18%, white 33%));
+}
+
 .annotation {
   user-select: none;
   padding: 15px 15px 10px 15px;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.5s;
 }
+
+/* .annotation:hover {
+    background-color: rgba(255, 255, 255, 0.201);
+} */
 
 .ruleArea {
   font-weight: 600;
@@ -147,9 +175,16 @@ footer {
 }
 
 .errorArea {
-  color: #999;
   margin-bottom: 12px;
   font-size: 14px;
+}
+
+.errText{
+
+}
+
+.errDetail{
+    color: #999;
 }
 
 /* BUTTONS */

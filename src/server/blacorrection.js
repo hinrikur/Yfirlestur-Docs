@@ -19,13 +19,13 @@
  *     determine which authorization mode (ScriptApp.AuthMode) the trigger is
  *     running in, inspect e.authMode.
  */
-function onOpen(e) {
-  DocumentApp.getUi()
-    .createMenu('Yfirlestur')
-    .addItem('Kveikja á yfirlestri', 'startCorrection')
-    .addItem('Valmynd', 'showSidebar')
-    .addToUi();
-}
+// function onOpen(e) {
+//   DocumentApp.getUi()
+//     .createMenu('Yfirlestur')
+//     .addItem('Kveikja á yfirlestri', 'startCorrection')
+//     .addItem('Lesa yfir skjal', 'showSidebar')
+//     .addToUi();
+// }
 
 /**
  * Runs when the add-on is installed.
@@ -38,9 +38,6 @@ function onOpen(e) {
  *     run in AuthMode.FULL, but onOpen triggers may be AuthMode.LIMITED or
  *     AuthMode.NONE.)
  */
-function onInstall(e) {
-  onOpen(e);
-}
 
 /**
  * Opens a sidebar in the document containing the add-on's user interface.

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import About, { FooterMenu } from './components/Sidebar';
+import About from './components/Sidebar';
+import FooterMenu from './components/FooterMenu';
 import Annotations from './components/Annotations';
 
 import './styles.css';

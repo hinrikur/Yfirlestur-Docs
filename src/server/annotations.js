@@ -34,3 +34,9 @@ function getAnnotatedLocations(singleAnnotation) {
   const end = singleAnnotation.end_char;
   return { start, end };
 }
+
+export default function highlightAnnotation() {
+  const doc = DocumentApp.getActiveDocument();
+  const rangeBuilder = doc.newRange();
+  doc.setSelection(rangeBuilder.build());
+}

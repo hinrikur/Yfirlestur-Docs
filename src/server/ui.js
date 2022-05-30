@@ -1,28 +1,22 @@
 export function onOpen(e) {
   DocumentApp.getUi()
     .createMenu('Yfirlestur')
-    .addItem('Kveikja á yfirlestri', 'startCorrection')
-    .addItem('Valmynd', 'showSidebar')
+    .addItem('Lesa yfir skjal', 'showSidebar')
     .addToUi();
 }
 
-// export const openDialog = () => {
-//   const html = HtmlService.createHtmlOutputFromFile('dialog-demo')
-//     .setWidth(600)
-//     .setHeight(600);
-//   DocumentApp.getUi().showModalDialog(html, 'Sheet Editor');
-// };
+export function showSidebar() {
+  const ui = DocumentApp.getUi();
+  const tmp = HtmlService.createTemplateFromFile('sidebar');
+  // tmp.correctedText = getCorrected();
+  // tmp.docText = docText()
 
-// export const openDialogBootstrap = () => {
-//   const html = HtmlService.createHtmlOutputFromFile('dialog-demo-bootstrap')
-//     .setWidth(600)
-//     .setHeight(600);
-//   DocumentApp.getUi().showModalDialog(html, 'Sheet Editor (Bootstrap)');
-// };
+  const html = tmp.evaluate();
+  html.setTitle('Yfirlestur');
 
-export const showSidebar = () => {
-  const html = HtmlService.createHtmlOutputFromFile('sidebar').setTitle(
-    'Yfirlestur'
-  );
-  DocumentApp.getUi().showSidebar(html);
-};
+  ui.showSidebar(html);
+}
+
+export function onInstall(e) {
+  onOpen(e);
+}

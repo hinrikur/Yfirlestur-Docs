@@ -20,14 +20,14 @@ function getParagraphTexts() {
       parTexts[i] = '';
     }
   }
-  Logger.log(parTexts);
+  // Logger.log(parTexts);
   return parTexts;
 }
 
-function getCorrectedPar(text) {
+function getCorrectedPar(text, parIndex) {
   let output;
   if (text !== '') {
-    Logger.log('Sending data...');
+    // Logger.log('Sending data...');
     // Make a POST request with a JSON payload.
     const data = {
       text,
@@ -43,7 +43,7 @@ function getCorrectedPar(text) {
     Logger.log('Response received');
     Logger.log(response.getContentText());
 
-    output = processAPI(JSON.parse(response.getContentText()));
+    output = processAPI(JSON.parse(response.getContentText()), parIndex);
   } else {
     output = '';
   }
@@ -51,7 +51,7 @@ function getCorrectedPar(text) {
 }
 
 function range(start, end) {
-  var ans = [];
+  const ans = [];
   for (let i = start; i <= end; i++) {
     ans.push(i);
   }
@@ -124,7 +124,41 @@ function adjustChars(p) {
   return paragraph;
 }
 
-function processAPI(response) {
+function getOriginalToken(parIndex, start, end) {
+  const doc = DocumentApp.getActiveDocument();
+  const body = doc.getBody();
+  const parText = body
+    .getChild(parIndex)
+    .editAsText()
+    .getText();
+  //   const rangeBuilder = doc.newRange();
+  try {
+    // rangeBuilder.addElement(parText, start, end);
+    // const annRange = rangeBuilder.build();
+    // const original = annRange
+    //   .getRangeElements()[1]
+    //   .getElement()
+    //   .getText();
+    const original = parText.slice(start, end);
+    return original;
+  } catch (error) {
+    // rangeBuilder.addElement(parText, start, end - 1);
+    // const annRange = rangeBuilder.build();
+    // const original = annRange
+    //   .getRangeElements()[0]
+    //   .getElement()
+    //   .getText();
+    const original = parText.slice(start, end - 1);
+    return original;
+  }
+  //   for (let i = 0; i < annRangeElements.length; i++) {
+  //     const element = annRangeElements[i]; //   Logger.log(annRangeElements);
+  //     Logger.log(element.getElement());
+  //   }
+  //   const original = '';
+}
+
+function processAPI(response, parIndex) {
   const json = response;
   // empty return array defined
   const annotationArray = [];
@@ -141,11 +175,13 @@ function processAPI(response) {
       // adjust likely errors in char locations from API
       // var adjustedJson = adjustChars(json.result[i][j]);
       const currentSentence = json.result[i][j];
-      var anns = filterParseErrors(json.result[i][j].annotations);
+      const anns = filterParseErrors(json.result[i][j].annotations);
       anns.forEach(ann => {
         ann.sent = currentSentence.original;
         ann.token = currentSentence.token;
         ann.nonce = currentSentence.nonce;
+        ann.parIndex = parIndex;
+        ann.original = getOriginalToken(parIndex, ann.start_char, ann.end_char);
       });
 
       // Sentence text added to annotation data
@@ -160,25 +196,35 @@ function processAPI(response) {
 }
 
 function getAllCorrections(inputTexts, numChildren) {
-  const correctedPars = {};
+  const corrections = [];
   for (let i = 0; i <= numChildren - 1; i += 1) {
-    const currentCorrection = getCorrectedPar(inputTexts[i]);
-    correctedPars[i] = currentCorrection;
+    const currentCorrection = getCorrectedPar(inputTexts[i], i)[0];
+    corrections.push(currentCorrection);
   }
-  return correctedPars;
+  return corrections.flat();
 }
 
-function startCorrection() {
-  Logger.log('Correction started!');
-  // showSidebar()
-
+function getNumDocChildren() {
   const numChildren = DocumentApp.getActiveDocument()
     .getBody()
     .getNumChildren();
+  return numChildren;
+}
+
+function startCorrection() {
+  // Logger.log('Correction started!');
+  // showSidebar()
+
+  const numChildren = getNumDocChildren();
+
   const texts = getParagraphTexts();
   const allCorrections = getAllCorrections(texts, numChildren);
-  Logger.log(allCorrections);
+  // Logger.log('All corrections, processed:');
+  // Logger.log(allCorrections);
   console.log(allCorrections);
+  return allCorrections.filter(function(e) {
+    return e;
+  });
 }
 
 export { startCorrection };
