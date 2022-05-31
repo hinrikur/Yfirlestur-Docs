@@ -1,4 +1,4 @@
-# Google Docs spelling and grammar correction add-on for Icelandic
+# Google Docs spelling and grammar add-on for Icelandic
 
 This repo contains the source code for *Yfirlestur Docs*, a spelling and grammar correction add-on for Icelandic, for use with Google Docs.
 
