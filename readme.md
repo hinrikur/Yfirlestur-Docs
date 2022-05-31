@@ -1,5 +1,5 @@
 # Yfirlestur integration for Google Docs
---- 
+
 This repo contains the source code for the *Yfirlestur Docs* spelling and grammar correction add-on for Icelandic, for use with Google Docs.
 
 <img src="media/docs-plugin-demo.PNG" 
