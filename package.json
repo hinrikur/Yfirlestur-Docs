@@ -1,15 +1,15 @@
 {
-  "name": "react-google-apps-script",
-  "version": "2.0.0",
-  "description": "Starter project for using React with Google Apps Script",
+  "name": "yfirlestur-docs",
+  "version": "1.0.0",
+  "description": "source code for *Yfirlestur Docs*, a spelling and grammar correction add-on for Icelandic",
   "repository": {
     "type": "git",
-    "url": "https://github.com/enuchi/React-Google-Apps-Script.git"
+    "url": "https://github.com/hinrikur/Yfirlestur-Docs.git"
   },
   "scripts": {
     "test": "test",
     "login": "clasp login",
-    "setup": "rimraf .clasp.json && clasp create --type sheets --title \"My React Project\" --rootDir ./dist",
+    "setup": "rimraf .clasp.json && clasp create --type docs --title \"Yfirlestur Docs Development Document\" --rootDir ./dist",
     "open": "clasp open --addon",
     "setup:https": "mkdirp certs && mkcert -key-file ./certs/key.pem -cert-file ./certs/cert.pem localhost 127.0.0.1",
     "build:dev": "cross-env NODE_ENV=development webpack",
@@ -26,7 +26,7 @@
     "script",
     "sheets"
   ],
-  "author": "Elisha Nuchi",
+  "author": "Hinrik Hafsteinsson",
   "license": "MIT",
   "engines": {
     "node": ">=10.0.0",
